@@ -3,7 +3,8 @@
     (function () {
       var hero = document.querySelector('[data-hl]'); if (!hero || !('IntersectionObserver' in window)) return;
       var hide = false;
-      var send = function () { document.dispatchEvent(new CustomEvent('dialbridge:lift', { detail: { px: 0, hide: hide } })); };
+      // Phones: sit above the strip where iPhone Safari's collapsed toolbar takes the first tap.
+      var send = function () { var ph = matchMedia('(max-width: 640px)').matches; document.dispatchEvent(new CustomEvent('dialbridge:lift', { detail: { px: ph ? 30 : 0, hide: hide } })); };
       new IntersectionObserver(function (es) { hide = es[0].isIntersecting && matchMedia('(max-width: 640px)').matches; send(); }, { threshold: 0.15 }).observe(hero);
       window.addEventListener('load', function () { setTimeout(send, 50); setTimeout(send, 1200); });
     })();
